@@ -98,7 +98,7 @@ local function recoil()
 	
 	local y = math.random(recoil * 90, recoil * 110) / 100 --math.random works in integers so we have to multiply the params and then devide the value if we want more randomness
 	local z = math.random(recoil * 90, recoil * 110) / 130
-	local x = math.random(-recoil * 90, recoil * 90) / 700
+	local x = math.random(-recoil * 90, recoil * 90) / 700 --make sure the first param is lower
 	local recoilVector = Vector3.new(x, -y, z)
 
 	recoilSpring:Impulse(recoilVector)
@@ -185,9 +185,9 @@ local function shoot()
 
 				local bulletHole = ReplicatedStorage.GunSystem.Effects.BulletHole:Clone()
 				--.lookAt changes the cframe to have the parts front face facing the position in the second param
-				bulletHole.CFrame = CFrame.lookAt(endPos, endPos + raycast.Normal) --raycast.Normal gives us the side we hit
+				bulletHole.CFrame = CFrame.lookAt(endPos, endPos + raycast.Normal) --raycast.Normal gives us the position of the face we hit
 				bulletHole.Parent = workspace
-				task.delay(2, function() --the function will be called after aprox. 2 seconds
+				task.delay(2, function() --the function will be called in a new thread after aprox. 2 seconds
 					TweenService:Create(bulletHole.Decal, TweenInfo.new(0.5, Enum.EasingStyle.Sine),
 						{Transparency = 1}):Play()
 					task.wait(0.5) --we could do tween.Completed but making a connection when we can just do task.wait is stupid
@@ -212,7 +212,7 @@ local function shoot()
 	crosshairGui.Reticle.UIScale.Scale = 1.5 --UIScale is an instance that relatively controls the size of its parent
 	TweenService:Create(
 		crosshairGui.Reticle.UIScale,
-		TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
+		TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), --easingDirection out makes the tween start fast and become slower towards the end
 		{ Scale = 1 }
 	):Play() --tween is linear interpolation made easy (and has easing styles)
 	
